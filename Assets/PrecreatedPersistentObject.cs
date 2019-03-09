@@ -1,3 +1,6 @@
+#pragma warning disable 649
+
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,10 +9,11 @@ using System.Runtime.Serialization;
 
 using UnityEngine;
 using Project;
+using Utils;
 
 namespace Serialization
 {
-	[System.Serializable]
+	[Serializable]
 	public class PrecreatedPersistentObject : MonoBehaviour, IPersistentUnityObject
 	{
 		[SerializeField]
@@ -78,6 +82,22 @@ namespace Serialization
 			this.transform.position = (Vector3)info.GetValue("pos", typeof(Vector3));
 			this.transform.rotation = (Quaternion)info.GetValue("rot", typeof(Quaternion));
 			this.transform.localScale = (Vector3)info.GetValue("scale", typeof(Vector3));
+
+			SerializationInfoEnumerator e = info.GetEnumerator();
+			while (e.MoveNext())
+			{
+				if (e.Name.Contains("UnityEngine."))
+				{
+					Type componentType = TypeUtil.FindType(e.Name, true);
+					Component component = this.GetComponent(componentType);
+					if (component == null)
+						continue;
+
+					SerializableComponent serializedComponent = (SerializableComponent)e.Value;
+
+					ComponentDeserializationUtility.DeserializeComponent(ref component, serializedComponent.DeserializeInfo);
+				}
+			}
 
 			int cnt = info.GetInt32("count");
 			if(cnt > 0)

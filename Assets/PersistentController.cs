@@ -15,10 +15,16 @@ namespace Serialization
 
 		Serializer serializer = new Serializer();
 
+		private static bool applicationIsQuitting = false;
+
 		static PersistentController Instance
 		{
 			get
 			{
+				if (applicationIsQuitting)
+				{
+					return null;
+				}
 				if (_instance == null)
 				{
 					_instance = FindObjectOfType<PersistentController>();
@@ -33,22 +39,26 @@ namespace Serialization
 
 		static public void RegisterPersistentObject(PersistentObject persistentObject)
 		{
-			Instance.m_PersistentObjects.Add(persistentObject);
+			if (Instance)
+				Instance.m_PersistentObjects.Add(persistentObject);
 		}
 
 		static public void UnregisterPersistentObject(PersistentObject persistentObject)
 		{
-			Instance.m_PersistentObjects.Remove(persistentObject);
+			if (Instance)
+				Instance.m_PersistentObjects.Remove(persistentObject);
 		}
 
 		static public void RegisterPersistentObject(long uid, PrecreatedPersistentObject persistentObject)
 		{
-			Instance.m_PrecreatedPersistentObjects.Add(uid, persistentObject);
+			if (Instance)
+				Instance.m_PrecreatedPersistentObjects.Add(uid, persistentObject);
 		}
 
 		static public void UnregisterPersistentObject(long uid)
 		{
-			Instance.m_PrecreatedPersistentObjects.Remove(uid);
+			if (Instance)
+				Instance.m_PrecreatedPersistentObjects.Remove(uid);
 		}
 
 		static public PrecreatedPersistentObject GetPrecreatedPersistentObject(long uid)
@@ -113,6 +123,11 @@ namespace Serialization
 			{
 				return serializer.Deserialize(bf, serializationStream);
 			}
+		}
+
+		private void OnDestroy ()
+		{
+			applicationIsQuitting = true;
 		}
 	}
 }

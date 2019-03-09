@@ -33,15 +33,28 @@ namespace Serialization
 			{
 				AddRigidbody(ref info, component as Rigidbody);
 			}
-
-			var wqwe = tp.GetFields();
-
-			var we = 5;
 		}
 
 		private void AddRigidbody(ref SerializationInfo info, Rigidbody rb)
 		{
 			info.AddValue("velocity", rb.velocity);
+		}
+	}
+
+	static public class ComponentDeserializationUtility
+	{
+		static public void DeserializeComponent(ref Component component, SerializationInfo info)
+		{
+			if (component is Rigidbody)
+			{
+				Rigidbody rb = component as Rigidbody;
+				DeserializeRigidbody(ref rb, info);
+			}
+		}
+
+		static private void DeserializeRigidbody(ref Rigidbody rb, SerializationInfo info)
+		{
+			rb.velocity = (Vector3)info.GetValue("velocity", typeof(Vector3));
 		}
 	}
 }
