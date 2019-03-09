@@ -9,6 +9,7 @@ using Project;
 
 namespace Serialization
 {
+	[System.Serializable]
 	public class PrecreatedPersistentObject : MonoBehaviour, IPersistentUnityObject
 	{
 		[SerializeField]
@@ -38,6 +39,8 @@ namespace Serialization
 
 		public void OnSerialize(SerializationInfo info, StreamingContext context)
 		{
+			info.AddValue("uid", this._uid);
+
 			info.AddValue("pos", this.transform.position);
 			info.AddValue("rot", this.transform.rotation);
 			info.AddValue("scale", this.transform.localScale);

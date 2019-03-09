@@ -51,6 +51,13 @@ namespace Serialization
 			Instance.m_PrecreatedPersistentObjects.Remove(uid);
 		}
 
+		static public PrecreatedPersistentObject GetPrecreatedPersistentObject(long uid)
+		{
+			PrecreatedPersistentObject persistentObject;
+			Instance.m_PrecreatedPersistentObjects.TryGetValue(uid, out persistentObject);
+			return persistentObject;
+		}
+
 		public void Serialize()
 		{
 			string saveFilePath = Application.persistentDataPath + "/" + "Save.json";
@@ -63,6 +70,10 @@ namespace Serialization
 			foreach (KeyValuePair<long, PrecreatedPersistentObject> entry in m_PrecreatedPersistentObjects)
 			{
 				serializer.Serialize(file, entry.Value);
+			}
+			foreach (PersistentObject obj in m_PersistentObjects)
+			{
+				serializer.Serialize(file, obj);
 			}
 
 
@@ -80,8 +91,6 @@ namespace Serialization
 			var obj = serializer.Deserialize(file);
 
 			Debug.Log("Deserialized");
-
-			var we = 5;
 		}
 
 		class Serializer

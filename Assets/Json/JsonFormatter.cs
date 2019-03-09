@@ -5,6 +5,7 @@ using System.Reflection;
 using System.Runtime.Serialization;
 using UnityEngine;
 
+using Serialization;
 using Serialization.Json;
 using Utils;
 
@@ -255,7 +256,12 @@ public class JsonFormatter : IFormatter
 			var si = this.ReadAsSerializationInfo(tp);
 			try
 			{
-				result = surrogate.SetObjectData(FormatterServices.GetUninitializedObject(tp), si, this.Context, selector);
+				var obj = FormatterServices.GetUninitializedObject(tp);
+
+				if (tp.FullName == "Serialization.PrecreatedPersistentObject")
+					obj = PersistentController.GetPrecreatedPersistentObject(si.GetInt64("uid"));
+
+				result = surrogate.SetObjectData(obj, si, this.Context, selector);
 			}
 			catch (System.Exception ex)
 			{
