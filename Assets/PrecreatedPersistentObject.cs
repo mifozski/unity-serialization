@@ -95,7 +95,7 @@ namespace Serialization
 
 					SerializableComponent serializedComponent = (SerializableComponent)e.Value;
 
-					ComponentDeserializationUtility.DeserializeComponent(ref component, serializedComponent.DeserializeInfo);
+					ComponentSerializationUtility.DeserializeComponent(ref component, serializedComponent.DeserializeInfo);
 				}
 			}
 
