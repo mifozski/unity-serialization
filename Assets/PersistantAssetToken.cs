@@ -92,11 +92,11 @@ namespace Serialization
 
         #region IPersistentUnityObject Interface
 
-        long IPersistentUnityObject.Uid
+        PersistentUid IPersistentUnityObject.Uid
         {
             get
             {
-                if (_asset == null) return 0;
+                if (_asset == null) return PersistentUid.Zero;
 
                 return _asset.Uid;
             }

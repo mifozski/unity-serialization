@@ -13,7 +13,7 @@ namespace Serialization
 	public class PersistentObject : MonoBehaviour, IPersistentAsset
 	{
 		[SerializeField()]
-		private long _uid;
+		private PersistentUid _uid;
 
 		[SerializeField()]
 		private string _assetId;
@@ -24,7 +24,7 @@ namespace Serialization
 			set { _assetId = value; }
 		}
 
-		long IPersistentUnityObject.Uid { get { return _uid; } }
+		PersistentUid IPersistentUnityObject.Uid { get { return _uid; } }
 
 		string IPersistentAsset.AssetId { get { return _assetId; } }
 
@@ -95,7 +95,7 @@ namespace Serialization
 		private class ChildObjectData : ISerializable
 		{
 			[System.NonSerialized()]
-			public long Uid;
+			public PersistentUid Uid;
 			[System.NonSerialized()]
 			public System.Type ComponentType;
 
@@ -114,13 +114,13 @@ namespace Serialization
 			{
 				this.DeserializeInfo = info;
 				this.DeserializeContext = context;
-				this.Uid = info.GetInt64("sp_uid");
+				this.Uid = new PersistentUid(info.GetString("sp_uid"));
 				this.ComponentType = info.GetValue("sp_t", typeof(System.Type)) as System.Type;
 			}
 
 			public void GetObjectData(SerializationInfo info, StreamingContext context)
 			{
-				info.AddValue("sp_uid", this.Uid);
+				info.AddValue("sp_uid", this.Uid.Value);
 				info.AddValue("sp_t", this.ComponentType, typeof(System.Type));
 				if (Pobj != null) Pobj.OnSerialize(info, context);
 			}

@@ -35,7 +35,7 @@ namespace Serialization
 
 		private List<PersistentObject> m_PersistentObjects = new List<PersistentObject>();
 
-		private Dictionary<long, PrecreatedPersistentObject> m_PrecreatedPersistentObjects = new Dictionary<long, PrecreatedPersistentObject>();
+		private Dictionary<string, PrecreatedPersistentObject> m_PrecreatedPersistentObjects = new Dictionary<string, PrecreatedPersistentObject>();
 
 		static public void RegisterPersistentObject(PersistentObject persistentObject)
 		{
@@ -49,19 +49,19 @@ namespace Serialization
 				Instance.m_PersistentObjects.Remove(persistentObject);
 		}
 
-		static public void RegisterPersistentObject(long uid, PrecreatedPersistentObject persistentObject)
+		static public void RegisterPersistentObject(PersistentUid uid, PrecreatedPersistentObject persistentObject)
 		{
 			if (Instance)
 				Instance.m_PrecreatedPersistentObjects.Add(uid, persistentObject);
 		}
 
-		static public void UnregisterPersistentObject(long uid)
+		static public void UnregisterPersistentObject(PersistentUid uid)
 		{
 			if (Instance)
 				Instance.m_PrecreatedPersistentObjects.Remove(uid);
 		}
 
-		static public PrecreatedPersistentObject GetPrecreatedPersistentObject(long uid)
+		static public PrecreatedPersistentObject GetPrecreatedPersistentObject(PersistentUid uid)
 		{
 			PrecreatedPersistentObject persistentObject;
 			Instance.m_PrecreatedPersistentObjects.TryGetValue(uid, out persistentObject);

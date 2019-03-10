@@ -18,7 +18,7 @@ namespace Serialization
 		/// <summary>
 		/// A uid to identify the object on reload. This must be unique and persistent.
 		/// </summary>
-		long Uid { get; }
+		PersistentUid Uid { get; }
 
 		void OnSerialize(SerializationInfo info, StreamingContext context);
 

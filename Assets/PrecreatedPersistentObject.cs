@@ -17,33 +17,38 @@ namespace Serialization
 	public class PrecreatedPersistentObject : MonoBehaviour, IPersistentUnityObject
 	{
 		[SerializeField]
-		private long _uid;
+		// [ReadOnly]
+		public PersistentUid _uid;
 
 		[SerializeField] private bool _serializeAllComponents;
 		[SerializeField] private Component[] _componentsToSerialize;
 		[SerializeField] private bool _serializeChildren;
 
-		long IPersistentUnityObject.Uid
+		public PersistentUid Uid
 		{
 			get
 			{
+				if (_uid == null)
+				{
+					_uid = PersistentUid.NewUid();
+				}
 				return _uid;
 			}
 		}
 
 		void Start()
 		{
-			PersistentController.RegisterPersistentObject(_uid, this);
+			PersistentController.RegisterPersistentObject(Uid, this);
 		}
 
 		void OnDestroy()
 		{
-			PersistentController.UnregisterPersistentObject(_uid);
+			PersistentController.UnregisterPersistentObject(Uid);
 		}
 
 		public void OnSerialize(SerializationInfo info, StreamingContext context)
 		{
-			info.AddValue("uid", this._uid);
+			info.AddValue("uid", this.Uid.Value);
 
 			info.AddValue("pos", this.transform.position);
 			info.AddValue("rot", this.transform.rotation);
@@ -123,7 +128,7 @@ namespace Serialization
 		private class ChildObjectData : ISerializable
 		{
 			[System.NonSerialized()]
-			public long Uid;
+			public PersistentUid Uid;
 			[System.NonSerialized()]
 			public System.Type ComponentType;
 
@@ -142,13 +147,13 @@ namespace Serialization
 			{
 				this.DeserializeInfo = info;
 				this.DeserializeContext = context;
-				this.Uid = info.GetInt64("sp_uid");
+				this.Uid = new PersistentUid(info.GetString("sp_uid"));
 				this.ComponentType = info.GetValue("sp_t", typeof(System.Type)) as System.Type;
 			}
 
 			public void GetObjectData(SerializationInfo info, StreamingContext context)
 			{
-				info.AddValue("sp_uid", this.Uid);
+				info.AddValue("sp_uid", this.Uid.Value);
 				info.AddValue("sp_t", this.ComponentType, typeof(System.Type));
 				if (Pobj != null) Pobj.OnSerialize(info, context);
 			}

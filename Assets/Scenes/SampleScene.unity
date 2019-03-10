@@ -392,7 +392,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6e3d1676c84fbff49b9c85f29e63cb83, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _uid: 1
   _serializeAllComponents: 0
   _componentsToSerialize:
   - {fileID: 219680019}
@@ -1169,7 +1168,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1eca0021e155298428449c6601942c3e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _uid: 123
   _assetId: 
 --- !u!65 &1731178558
 BoxCollider:
@@ -1556,7 +1554,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6e3d1676c84fbff49b9c85f29e63cb83, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _uid: 0
   _serializeAllComponents: 0
   _componentsToSerialize:
   - {fileID: 2099189835}
