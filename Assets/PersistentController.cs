@@ -77,14 +77,16 @@ namespace Serialization
 			FileStream file = File.Create(saveFilePath);
 			file.SetLength(0);
 
-			foreach (KeyValuePair<long, PrecreatedPersistentObject> entry in m_PrecreatedPersistentObjects)
-			{
-				serializer.Serialize(file, entry.Value);
-			}
-			foreach (PersistentObject obj in m_PersistentObjects)
-			{
-				serializer.Serialize(file, obj);
-			}
+			serializer.Serialize(file, m_PrecreatedPersistentObjects);
+
+			// foreach (KeyValuePair<long, PrecreatedPersistentObject> entry in m_PrecreatedPersistentObjects)
+			// {
+			// 	serializer.Serialize(file, entry.Value);
+			// }
+			// foreach (PersistentObject obj in m_PersistentObjects)
+			// {
+			// 	serializer.Serialize(file, obj);
+			// }
 
 
 			Debug.Log("Data written to " + saveFilePath + " @ " + DateTime.Now.ToShortTimeString());

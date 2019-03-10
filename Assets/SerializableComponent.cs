@@ -35,6 +35,8 @@ namespace Serialization
 
 	static public class ComponentSerializationUtility
 	{
+		#region "Serialization helpers"
+
 		static public void SerializableComponent(Component component, ref SerializationInfo info)
 		{
 			if (component is Rigidbody)
@@ -44,6 +46,10 @@ namespace Serialization
 			else if (component is Animator)
 			{
 				SerializeAnimator(ref info, component as Animator);
+			}
+			else if (component is Light)
+			{
+				SerializeLight(ref info, component as Light);
 			}
 		}
 
@@ -101,6 +107,19 @@ namespace Serialization
 			info.AddValue("currentStates", currentStates);
 		}
 
+		private static void SerializeLight(ref SerializationInfo info, Light light)
+		{
+			info.AddValue("enabled", light.enabled);
+			info.AddValue("range", light.range);
+			info.AddValue("color", light.color, typeof(UnityEngine.Color));
+			info.AddValue("intensity", light.intensity);
+			info.AddValue("bounceIntensity", light.bounceIntensity);
+		}
+
+		#endregion
+
+		#region "Deserialization helpers"
+
 		static public void DeserializeComponent(ref Component component, SerializationInfo info)
 		{
 			if (component is Rigidbody)
@@ -113,6 +132,17 @@ namespace Serialization
 				Animator animator = component as Animator;
 				DeserializeAnimator(ref animator, info);
 			}
+			else if (component is Light)
+			{
+				Light light = component as Light;
+				DeserializeLight(ref light, info);
+			}
+		}
+
+		static private void DeserializeRigidbody(ref Rigidbody rb, SerializationInfo info)
+		{
+			rb.velocity = (Vector3)info.GetValue("velocity", typeof(Vector3));
+			rb.angularVelocity = (Vector3)info.GetValue("angularVelocity", typeof(Vector3));
 		}
 
 		private static void DeserializeAnimator(ref Animator animator, SerializationInfo info)
@@ -156,10 +186,15 @@ namespace Serialization
 			}
 		}
 
-		static private void DeserializeRigidbody(ref Rigidbody rb, SerializationInfo info)
+		private static void DeserializeLight(ref Light light, SerializationInfo info)
 		{
-			rb.velocity = (Vector3)info.GetValue("velocity", typeof(Vector3));
-			rb.angularVelocity = (Vector3)info.GetValue("angularVelocity", typeof(Vector3));
+			light.enabled = info.GetBoolean("enabled");
+			light.range = info.GetSingle("range");
+			light.color = (UnityEngine.Color)info.GetValue("color", typeof(UnityEngine.Color));
+			light.intensity = info.GetSingle("intensity");
+			light.bounceIntensity = info.GetSingle("bounceIntensity");
 		}
+
+		#endregion
 	}
 }
