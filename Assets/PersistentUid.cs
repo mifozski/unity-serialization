@@ -2,8 +2,10 @@ using System;
 
 namespace Serialization
 {
+	[Serializable]
 	public sealed class PersistentUid
 	{
+		[UnityEngine.SerializeField]
 		string _uid;
 
 		static public PersistentUid Zero { get { return new PersistentUid(""); } }
