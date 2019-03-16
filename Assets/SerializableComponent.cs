@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace Serialization
 {
-    [System.Serializable]
+	[System.Serializable]
 	class SerializableComponent : ISerializable
 	{
 		private Component component;
@@ -50,6 +50,21 @@ namespace Serialization
 			else if (component is Light)
 			{
 				SerializeLight(ref info, component as Light);
+			}
+			// Custom Component...
+			else
+			{
+				var members = component.GetType().GetFields(
+							BindingFlags.Public |
+							BindingFlags.NonPublic |
+							BindingFlags.Static |
+							BindingFlags.Instance |
+							BindingFlags.DeclaredOnly);
+				foreach (FieldInfo field in members)
+				{
+					var value = field.GetValue(component);
+					info.AddValue(field.Name, value);
+				}
 			}
 		}
 
@@ -136,6 +151,24 @@ namespace Serialization
 			{
 				Light light = component as Light;
 				DeserializeLight(ref light, info);
+			}
+			else
+			{
+				var members = component.GetType().GetFields(
+							BindingFlags.Public |
+							BindingFlags.NonPublic |
+							BindingFlags.Static |
+							BindingFlags.Instance |
+							BindingFlags.DeclaredOnly);
+				SerializationInfoEnumerator e = info.GetEnumerator();
+				while (e.MoveNext())
+				{
+					var field = members.Where(f => f.Name == e.Name).FirstOrDefault();
+					if (field != null)
+					{
+						field.SetValue(component, Convert.ChangeType(e.Value, field.FieldType));
+					}
+				}
 			}
 		}
 

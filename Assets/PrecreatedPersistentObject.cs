@@ -91,17 +91,16 @@ namespace Serialization
 			SerializationInfoEnumerator e = info.GetEnumerator();
 			while (e.MoveNext())
 			{
-				if (e.Name.Contains("UnityEngine."))
-				{
-					Type componentType = TypeUtil.FindType(e.Name, true);
-					Component component = this.GetComponent(componentType);
-					if (component == null)
-						continue;
+				Type componentType = TypeUtil.FindType(e.Name, true);
+				if (componentType == null)
+					continue;
+				Component component = this.GetComponent(componentType);
+				if (component == null)
+					continue;
 
-					SerializableComponent serializedComponent = (SerializableComponent)e.Value;
+				SerializableComponent serializedComponent = (SerializableComponent)e.Value;
 
-					ComponentSerializationUtility.DeserializeComponent(ref component, serializedComponent.DeserializeInfo);
-				}
+				ComponentSerializationUtility.DeserializeComponent(ref component, serializedComponent.DeserializeInfo);
 			}
 
 			int cnt = info.GetInt32("count");

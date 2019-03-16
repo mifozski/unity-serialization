@@ -392,6 +392,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6e3d1676c84fbff49b9c85f29e63cb83, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _uid:
+    _uid: m8SCQJFan0+vaeer5vr4+Q
   _serializeAllComponents: 0
   _componentsToSerialize:
   - {fileID: 219680019}
@@ -1168,6 +1170,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1eca0021e155298428449c6601942c3e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _uid:
+    _uid: sZjAvSW50k+hl3uKyjgkQQ
   _assetId: 
 --- !u!65 &1731178558
 BoxCollider:
@@ -1554,27 +1558,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6e3d1676c84fbff49b9c85f29e63cb83, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _uid:
+    _uid: 0eGRK0Y5N0+po9Oiun5ZAw
   _serializeAllComponents: 0
   _componentsToSerialize:
   - {fileID: 2099189835}
   - {fileID: 2099189841}
   _serializeChildren: 0
---- !u!95 &2099189841
-Animator:
-  serializedVersion: 3
+--- !u!114 &2099189841
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2099189834}
   m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: f9c05b6dfd1fb11429ef76c0b00d9015, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fffa193dfaf4c764c80552e145321888, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_TestIntVar: 123
+  m_TestVec3Var: {x: 2, y: 3, z: 6}
+  m_TestQuatVar: {x: 0, y: 0, z: 0, w: 0}

@@ -5,3 +5,4 @@ Unity components currently supported:
 * Rigidbody - velocity and angularVelocity)
 * Animator (current state on every layer and its normalized time)
 * Light
+* User scripts
