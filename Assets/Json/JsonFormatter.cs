@@ -258,10 +258,21 @@ public class JsonFormatter : IFormatter
 			{
 				var obj = FormatterServices.GetUninitializedObject(tp);
 
-				if (tp.FullName == "Serialization.PrecreatedPersistentObject")
+				if (tp.FullName == "Serialization.PersistentObject")
 				{
 					// TODO: Remove this hack. Use tokens instead of trying to directly serialize PersistentObject--the descedant of MonoBehavior
+
 					obj = PersistenceController.GetPrecreatedPersistentObject(new PersistentUid(si.GetString("uid")));
+
+					if (obj == null)
+					{
+						string linkedPrefabUid = si.GetString("linkedPrefabUid");
+						if (linkedPrefabUid != "")
+						{
+							PersistentObject prefab = PersistenceController.GetRegisteredPrefab(linkedPrefabUid);
+							obj = GameObject.Instantiate(prefab);
+						}
+					}
 				}
 
 				result = surrogate.SetObjectData(obj, si, this.Context, selector);

@@ -85,6 +85,11 @@ namespace Serialization
 		{
 			info.AddValue("enabled", animator.enabled);
 
+			if (animator.runtimeAnimatorController == null)
+			{
+				return;
+			}
+
 			// Parameters
 			animator.enabled = (bool)info.GetValue("enabled", typeof(bool));
 			string [] serializedParameterNames = new string[animator.parameterCount];
@@ -181,6 +186,11 @@ namespace Serialization
 		private static void DeserializeAnimator(ref Animator animator, SerializationInfo info)
 		{
 			animator.enabled = (bool)info.GetValue("enabled", typeof(bool));
+
+			if (animator.runtimeAnimatorController == null)
+			{
+				return;
+			}
 
 			// Parameters
 			string [] serializedParameterNames = (string[])info.GetValue("parameterNames", (typeof(string[])));

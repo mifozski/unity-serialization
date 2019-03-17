@@ -41,7 +41,10 @@ namespace Serialization
 		static public void RegisterPersistentObject(PersistentUid uid, PersistentObject persistentObject)
 		{
 			if (Instance)
+			{
 				Instance.m_PrecreatedPersistentObjects.Add(uid, persistentObject);
+				Debug.Log($"Registering created object: {persistentObject.name} with uid: {uid}");
+			}
 		}
 
 		static public void UnregisterPersistentObject(PersistentUid uid)
@@ -73,6 +76,23 @@ namespace Serialization
 			}
 		}
 
+		public static void OverridePrefabs(List<PersistentObject> prefabs)
+		{
+			if (Instance)
+			{
+				Instance.SetPrefabs(prefabs);
+			}
+		}
+
+		public static PersistentObject GetRegisteredPrefab(string uid)
+		{
+			if (Instance)
+			{
+				return Instance.GetPrefab(uid);
+			}
+			return null;
+		}
+
 		private void AddPrefab(PersistentObject prefab)
 		{
 			if (_prefabMap == null)
@@ -90,6 +110,24 @@ namespace Serialization
 			}
 
 			_prefabMap.Remove(prefab);
+		}
+
+		private void SetPrefabs(List<PersistentObject> prefabs)
+		{
+			if (_prefabMap == null)
+			{
+				CreatePrefabMap();
+			}
+
+			_prefabMap.Set(prefabs);
+		}
+
+		private PersistentObject GetPrefab(string uid)
+		{
+			if (_prefabMap == null)
+				return null;
+
+			return _prefabMap.GetPrefab(uid);
 		}
 
 		private void CreatePrefabMap()

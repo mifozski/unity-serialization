@@ -327,7 +327,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!108 &219680019
 Light:
   m_ObjectHideFlags: 0
@@ -395,6 +395,8 @@ MonoBehaviour:
   _persistenceUid:
     _uid: 
   _isPrefab: 0
+  _linkedPrefabUid:
+    _uid: 
   _prefabUid:
     _uid: 
   _serializeAllComponents: 0
@@ -1524,7 +1526,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!54 &2099189835
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1628,6 +1630,8 @@ MonoBehaviour:
   _persistenceUid:
     _uid: 6Hdt21MB4EiNZtFenhCglg
   _isPrefab: 0
+  _linkedPrefabUid:
+    _uid: 
   _prefabUid:
     _uid: 
   _serializeAllComponents: 0

@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 using UnityEditor;
 using UnityEditor.Experimental.SceneManagement;
 
@@ -127,6 +128,11 @@ namespace Serialization
 			EditorGUILayout.PropertyField(componentsToSerializeProp, true);
 
 			serializedObject.ApplyModifiedProperties();
+
+			if (GUILayout.Button("Update prefab map"))
+			{
+				UpdatePrefabMap();
+			}
 		}
 
 		PersistentObject GetPrefab()
@@ -153,6 +159,28 @@ namespace Serialization
 					PersistenceController.UnregisterPrefab(persistentObject);
 				}
 			}
+		}
+
+		private void UpdatePrefabMap()
+		{
+			string [] guids = AssetDatabase.FindAssets("t:prefab");
+
+			PersistentObject[] allFoundScripts = Resources.FindObjectsOfTypeAll<PersistentObject>();
+			List<PersistentObject> prefabs = new List<PersistentObject>();
+			foreach (string guid in guids)
+			{
+				string path = AssetDatabase.GUIDToAssetPath(guid);
+				PersistentObject persisnteObj = AssetDatabase.LoadAssetAtPath(path, typeof(PersistentObject)) as PersistentObject;
+				if (persisnteObj == null)
+					continue;
+
+				if (persisnteObj.IsPrefab)
+				{
+					prefabs.Add(persisnteObj);
+				}
+			}
+
+			PersistenceController.OverridePrefabs(prefabs);
 		}
 	}
 }

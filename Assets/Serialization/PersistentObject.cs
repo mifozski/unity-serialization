@@ -32,11 +32,11 @@ namespace Serialization
 		[HideInInspector]
 		private PersistentUid _prefabUid = null;
 
-		private bool _createdFromPrefab = false;
-
 		[SerializeField] private bool _serializeAllComponents;
 		[SerializeField] private Component[] _componentsToSerialize;
 		[SerializeField] private bool _serializeChildren;
+
+		bool _uidSet = false;
 
 		public PersistentUid Uid
 		{
@@ -50,32 +50,48 @@ namespace Serialization
 			}
 		}
 
-		// public PersistentUid PrefabUid
-		// {
-		// 	get
-		// 	{
-		// 		if (_prefabUid.Value == null)
-		// 		{
-		// 			_prefabUid = PersistentUid.NewUid();
-		// 		}
-		// 		return _prefabUid;
-		// 	}
-		// }
+		public PersistentUid PrefabUid
+		{
+			get
+			{
+				if (_prefabUid != null && _prefabUid.Value != "")
+				{
+					return _prefabUid;
+				}
+				else
+				{
+					Debug.LogError("PrefabUid was accessed but was null");
+					return null;
+				}
+			}
+		}
+
+		public bool IsPrefab
+		{
+			get
+			{
+				return _isPrefab;
+			}
+		}
 
 		void Awake()
 		{
-			// Created from a prefab
-			if (_isPrefab && Application.isPlaying)
-			{
-				Debug.Log($"SETTING NEW ID FOR {gameObject.name}");
-				_persistenceUid = PersistentUid.NewUid();
-				_isPrefab = false;
-				_linkedPrefabUid = _prefabUid;
-			}
 		}
 
 		void Start()
 		{
+			// Created from a prefab
+			if (_isPrefab && Application.isPlaying)
+			{
+				if (_uidSet == false)
+				{
+					Debug.Log($"SETTING NEW ID FOR {gameObject.name}");
+					_persistenceUid = PersistentUid.NewUid();
+					_isPrefab = false;
+					_linkedPrefabUid = _prefabUid;
+				}
+			}
+
 			PersistenceController.RegisterPersistentObject(Uid, this);
 		}
 
@@ -87,6 +103,15 @@ namespace Serialization
 		public void OnSerialize(SerializationInfo info, StreamingContext context)
 		{
 			info.AddValue("uid", this.Uid.Value);
+
+			if (_linkedPrefabUid != null)
+			{
+				info.AddValue("linkedPrefabUid", _linkedPrefabUid.ToString());
+			}
+			else
+			{
+				info.AddValue("linkedPrefabUid", "");
+			}
 
 			info.AddValue("pos", this.transform.position);
 			info.AddValue("rot", this.transform.rotation);
@@ -122,6 +147,9 @@ namespace Serialization
 
 		public void OnDeserialize(SerializationInfo info, StreamingContext context, IAssetBundle assetBundle)
 		{
+			_persistenceUid = new PersistentUid(info.GetString("uid"));
+			_uidSet = true;
+
 			this.transform.position = (Vector3)info.GetValue("pos", typeof(Vector3));
 			this.transform.rotation = (Quaternion)info.GetValue("rot", typeof(Quaternion));
 			this.transform.localScale = (Vector3)info.GetValue("scale", typeof(Vector3));
