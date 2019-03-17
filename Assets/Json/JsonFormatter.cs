@@ -260,8 +260,8 @@ public class JsonFormatter : IFormatter
 
 				if (tp.FullName == "Serialization.PrecreatedPersistentObject")
 				{
-					// TODO: Remove this hack. Use tokens instead of directly serializing PersistentObject--the descedant of MonoBehavior
-					obj = PersistentController.GetPrecreatedPersistentObject(new PersistentUid(si.GetString("uid")));
+					// TODO: Remove this hack. Use tokens instead of trying to directly serialize PersistentObject--the descedant of MonoBehavior
+					obj = PersistenceController.GetPrecreatedPersistentObject(new PersistentUid(si.GetString("uid")));
 				}
 
 				result = surrogate.SetObjectData(obj, si, this.Context, selector);

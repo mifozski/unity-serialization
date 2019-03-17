@@ -25,32 +25,11 @@ namespace Serialization
 			var uidProp = property.FindPropertyRelative("_uid");
 			var value = uidProp.stringValue;
 
-			// Debug.Log($"Value: {value}");
+			GUI.enabled = false;
+			EditorGUI.SelectableLabel(r1, value, EditorStyles.textField);
+			GUI.enabled = true;
 
-			var attrib = this.fieldInfo.GetCustomAttributes(typeof(PersistentUid.ConfigAttribute), false).FirstOrDefault() as PersistentUid.ConfigAttribute;
-			bool resetOnZero = attrib == null || !attrib.AllowZero;
-			bool readWrite = attrib == null || !attrib.ReadOnly;
-
-			// if (readWrite)
-			// {
-			// 	//read-write
-			// 	EditorGUI.BeginChangeCheck();
-			// 	var sval = EditorGUI.TextField(r1, value.ToString());
-			// 	if (EditorGUI.EndChangeCheck())
-			// 	{
-			// 		uidProp.stringValue = sval;
-			// 	}
-			// }
-			// else
-			// {
-				//read-only
-				GUI.enabled = false;
-				// EditorGUI.PropertyField(position, uidProp, label, true);
-				EditorGUI.SelectableLabel(r1, value, EditorStyles.textField);
-				GUI.enabled = true;
-			// }
-
-			if (GUI.Button(r2, "New Id") || (resetOnZero && value == ""))
+			if (GUI.Button(r2, "New Id"))
 			{
 				value = PersistentUid.NewUid().Value;
 				uidProp.stringValue = value.ToString();
